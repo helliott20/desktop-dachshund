@@ -1,0 +1,174 @@
+:root {
+  --ink: #23120b;       /* text */
+  --edge: #23120b;      /* pixel borders */
+  --paper: #fff8ec;     /* panel background */
+  --paper-2: #f3e3c7;   /* hover / secondary buttons */
+  --track: #e9dcc5;     /* empty part of a stat bar */
+  --field: #ffffff;     /* text input */
+  --shadow: rgba(35, 18, 11, 0.55);
+  --tan: #d98a45;
+  --on-tan: #23120b;
+  --good: #58b847;
+  --warn: #e5b133;
+  --bad: #d64545;
+  --font: "Segoe UI", system-ui, sans-serif;
+  color-scheme: light dark;
+}
+
+/* Follows the Windows light/dark app setting (Settings > Personalisation >
+   Colours). Electron reports it to the page as prefers-color-scheme. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #f3e6d6;
+    --edge: #8c7566;
+    --paper: #241c19;
+    --paper-2: #3a2d27;
+    --track: #140f0d;
+    --field: #15100e;
+    --shadow: rgba(0, 0, 0, 0.6);
+  }
+}
+
+html, body {
+  margin: 0;
+  width: 300px;
+  height: 240px;
+  overflow: hidden;
+  background: transparent;
+  font: 12px/1.2 var(--font);
+  color: var(--ink);
+  user-select: none;
+}
+
+.hidden { display: none !important; }
+
+#scene {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  height: 136px;
+  image-rendering: pixelated;
+  cursor: grab;
+}
+#scene.dragging { cursor: grabbing; }
+
+/* Pixel-style panels: hard edges, offset shadow. */
+.panel, #toolbar, #stats, #bubble, #dialog {
+  background: var(--paper);
+  border: 2px solid var(--edge);
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+
+#hud { position: absolute; left: 4px; right: 4px; top: 2px; }
+
+#toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px;
+}
+#toolbar button {
+  width: 30px;
+  height: 26px;
+  padding: 0;
+  font-size: 15px;
+  border: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+}
+#toolbar img, .bar img { image-rendering: pixelated; display: block; margin: auto; }
+.bar img { transform: scale(0.75); transform-origin: left center; margin: 0; }
+#toolbar button:hover { border-color: var(--edge); background: var(--paper-2); }
+#toolbar button:active { transform: translate(1px, 1px); }
+#toolbar button:disabled { opacity: 0.35; cursor: default; }
+
+#stats {
+  margin-top: 4px;
+  padding: 3px 6px 4px;
+  width: 150px;
+}
+#stats .title {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+#petMeta { font-weight: 400; opacity: 0.75; font-size: 11px; }
+.bar { display: flex; align-items: center; gap: 4px; height: 11px; margin-top: 1px; }
+.bar i {
+  font-style: normal;
+  font-size: 9px;
+  width: 12px;
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+}
+.bar b {
+  flex: 1;
+  height: 6px;
+  border: 1px solid var(--edge);
+  background: var(--track);
+}
+.bar s {
+  display: block;
+  height: 100%;
+  width: 50%;
+  background: var(--good);
+  text-decoration: none;
+}
+.bar.mid s { background: var(--warn); }
+.bar.low s { background: var(--bad); }
+
+#bubble {
+  position: absolute;
+  right: 8px;
+  bottom: 124px;
+  max-width: 160px;
+  min-width: 18px;
+  text-align: center;
+  padding: 4px 8px;
+  font-weight: 600;
+  border-radius: 0;
+  z-index: 5;
+}
+#bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  right: 12px;
+  border: 6px solid transparent;
+  border-top-color: var(--edge);
+  border-bottom: 0;
+}
+#bubble.left { right: auto; left: 8px; }
+#bubble.left::after { right: auto; left: 12px; }
+
+#dialog {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: 16px;
+  padding: 8px;
+  z-index: 10;
+}
+#dialog label { display: block; font-weight: 700; margin-bottom: 4px; }
+#dialog input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid var(--edge);
+  padding: 3px 4px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--field);
+}
+#dialog input.hidden { display: none; }
+#dialog .row { display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px; }
+#dialog button {
+  font: inherit;
+  font-weight: 700;
+  border: 2px solid var(--edge);
+  color: var(--ink);
+  background: var(--paper-2);
+  padding: 2px 10px;
+  cursor: pointer;
+}
+#dialog button[type="submit"] { background: var(--tan); color: var(--on-tan); }

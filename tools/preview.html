@@ -1,0 +1,19 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+body{background:#9fb7c9;font:12px monospace;display:flex;flex-wrap:wrap;gap:8px;padding:8px;margin:0}
+figure{margin:0;background:#dfe8ee;padding:4px}
+</style></head><body>
+<script src="../src/sprites.js"></script>
+<script>
+const S = 5;
+for (const [name, frames] of Object.entries(Sprites.ANIMATIONS)) {
+  frames.forEach((g, i) => {
+    const f = document.createElement('figure');
+    const c = document.createElement('canvas');
+    c.width = Sprites.W * S; c.height = Sprites.H * S;
+    Sprites.draw(c.getContext('2d'), g, S);
+    f.append(c, document.createElement('br'), `${name} ${i}`);
+    document.body.append(f);
+  });
+}
+</script></body></html>

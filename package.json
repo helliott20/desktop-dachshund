@@ -1,0 +1,80 @@
+{
+  "name": "desktop-dachshund",
+  "productName": "Desktop Dachshund",
+  "version": "1.0.1",
+  "description": "An 8-bit chocolate dapple dachshund that lives on your Windows desktop. Feed it, walk it, give it belly rubs.",
+  "main": "main.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/pet.test.js test/sprites.test.js test/version.test.js test/ui.test.js",
+    "test:unit": "node --test test/pet.test.js test/sprites.test.js test/version.test.js",
+    "test:ui": "node --test test/ui.test.js",
+    "test:electron": "node --test --test-concurrency=1 test/electron.test.js",
+    "icons": "node tools/make-icons.js",
+    "dist": "electron-builder --win nsis portable --x64 --publish never",
+    "dist:dir": "electron-builder --win dir --x64",
+    "dist:linux": "electron-builder --win portable --x64 --publish never -c.win.signAndEditExecutable=false"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
+    "playwright-core": "^1.56.1"
+  },
+  "build": {
+    "appId": "com.desktopdachshund.app",
+    "productName": "Desktop Dachshund",
+    "files": [
+      "main.js",
+      "preload.js",
+      "updater.js",
+      "renderer/**",
+      "src/**",
+      "assets/**",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "assets/icon.png",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Desktop Dachshund",
+      "artifactName": "DesktopDachshund-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "DesktopDachshund-${version}-portable.exe"
+    },
+    "afterPack": "./tools/after-pack.js",
+    "electronLanguages": [
+      "en-US",
+      "en-GB"
+    ],
+    "compression": "maximum",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "helliott20",
+        "repo": "desktop-dachshund"
+      }
+    ]
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/helliott20/desktop-dachshund.git"
+  }
+}

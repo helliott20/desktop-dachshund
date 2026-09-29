@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:">
+  <title>Desktop Dachshund</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="hud" class="hidden">
+    <div id="toolbar">
+      <button data-action="feed" title="Feed"><img data-icon="bowl" alt=""></button>
+      <button data-action="treat" title="Treat"><img data-icon="bone" alt=""></button>
+      <button data-action="play" title="Play fetch"><img data-icon="ball" alt=""></button>
+      <button data-action="pet" title="Belly rub"><img data-icon="heart" alt=""></button>
+      <button data-action="walk" title="Walk"><img data-icon="paw" alt=""></button>
+      <button data-action="bath" title="Bath"><img data-icon="bubble" alt=""></button>
+      <button data-action="clean" title="Clean up"><img data-icon="broom" alt=""></button>
+      <button data-action="medicine" title="Vet"><img data-icon="pill" alt=""></button>
+      <button data-action="toggle-sleep" title="Sleep / wake" id="sleepBtn"><img data-icon="zzz" alt=""></button>
+    </div>
+    <div id="stats">
+      <div class="title"><span id="petName"></span><span id="petMeta"></span></div>
+      <div class="bar" data-stat="fullness"><i><img data-icon="bowl" alt=""></i><b><s></s></b></div>
+      <div class="bar" data-stat="happiness"><i><img data-icon="heart" alt=""></i><b><s></s></b></div>
+      <div class="bar" data-stat="energy"><i><img data-icon="bolt" alt=""></i><b><s></s></b></div>
+      <div class="bar" data-stat="hygiene"><i><img data-icon="bubble" alt=""></i><b><s></s></b></div>
+      <div class="bar" data-stat="health"><i><img data-icon="cross" alt=""></i><b><s></s></b></div>
+    </div>
+  </div>
+
+  <div id="bubble" class="hidden"></div>
+
+  <form id="dialog" class="hidden" autocomplete="off">
+    <label id="dialogLabel" for="dialogInput"></label>
+    <input id="dialogInput" maxlength="20">
+    <div class="row">
+      <button type="button" id="dialogCancel">Cancel</button>
+      <button type="submit" id="dialogOk">OK</button>
+    </div>
+  </form>
+
+  <canvas id="scene"></canvas>
+
+  <script src="../src/sprites.js"></script>
+  <script src="../src/pet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
