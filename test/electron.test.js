@@ -152,12 +152,13 @@ test('window never changes size while dragged or walking, even at 125% display s
   await app.close();
 });
 
-// Electron only passes the OS theme through to the page's CSS on Windows/macOS;
-// on Linux CI the media query never flips, so this runs on the Windows job.
-test('controls follow the Windows light/dark setting live', { skip: process.platform !== 'win32' && 'needs Windows theme support' }, async () => {
+test('controls follow the Windows light/dark setting live', async () => {
   const { app, page } = await launch();
   try {
     await page.waitForFunction(() => window.__pet && window.__pet.state);
+    // Playwright forces prefers-color-scheme: light by default; turn that off
+    // so the page sees the real OS/Electron theme.
+    await page.emulateMedia({ colorScheme: null });
     const bg = () => page.$eval('#toolbar', (el) => getComputedStyle(el).backgroundColor);
     await app.evaluate(({ nativeTheme }) => { nativeTheme.themeSource = 'dark'; });
     await page.waitForFunction(() => matchMedia('(prefers-color-scheme: dark)').matches);
