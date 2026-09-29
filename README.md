@@ -35,11 +35,13 @@ Your dog is saved separately from the app, so updating keeps it.
 
 ### Publishing a release
 
-1. Bump `version` in `package.json` (e.g. `1.0.2`) and commit.
-2. Tag and push: `git tag v1.0.2 && git push origin main v1.0.2`
-3. The *Test & build* workflow runs every test on Windows, builds the
-   installer and portable exe, and attaches them (plus `latest.yml`, which
-   the updater reads) to a GitHub Release for that tag.
+1. Bump `version` in `package.json` (e.g. `1.0.2`) and push to `main`.
+2. The *Test & build* workflow runs every test on Windows, builds the
+   installer and portable exe, and publishes a GitHub Release `v1.0.2`
+   with them attached (plus `latest.yml`, which the updater reads).
+
+Pushes that don't change the version just build and test; nothing is
+released twice. Pushing a `v*` tag that matches the version also works.
 
 The repo must stay public for update checks to work without a token.
 
