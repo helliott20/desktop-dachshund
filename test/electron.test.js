@@ -11,7 +11,9 @@ const electronPath = require('electron');
 
 const ROOT = path.resolve(__dirname, '..');
 const SHOTS = path.join(ROOT, 'test-output');
-const needsNoSandbox = process.platform === 'linux' && process.getuid && process.getuid() === 0;
+// Linux CI (GitHub's Ubuntu 24.04) blocks the user namespaces Chromium's
+// sandbox needs, and root can't use it at all; tests run without it there.
+const needsNoSandbox = process.platform === 'linux';
 const ARGS = [...(needsNoSandbox ? ['--no-sandbox'] : []), ROOT];
 
 const userData = fs.mkdtempSync(path.join(os.tmpdir(), 'dachshund-test-'));
@@ -22,8 +24,9 @@ async function launch() {
     executablePath: electronPath,
     args: ARGS,
     env: { ...process.env, PET_USER_DATA: userData },
+    timeout: 30000, // fail fast instead of hanging if Electron can't start
   });
-  const page = await app.firstWindow();
+  const page = await app.firstWindow({ timeout: 30000 });
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.waitForLoadState('domcontentloaded');
@@ -134,8 +137,9 @@ test('window never changes size while dragged or walking, even at 125% display s
     executablePath: electronPath,
     args: [...ARGS.slice(0, -1), '--force-device-scale-factor=1.25', ROOT],
     env: { ...process.env, PET_USER_DATA: userData },
+    timeout: 30000,
   });
-  const page = await app.firstWindow();
+  const page = await app.firstWindow({ timeout: 30000 });
   await page.waitForFunction(() => window.__pet && window.__pet.state);
   await page.evaluate(async () => {
     window.desktop.dragStart(600, 600);
@@ -184,9 +188,10 @@ test('update check: portable copy is told about a newer GitHub release', async (
     executablePath: electronPath,
     args: ARGS,
     env: { ...process.env, PET_USER_DATA: userData, PET_UPDATE_API: api, PORTABLE_EXECUTABLE_FILE: 'C:\\fake\\DesktopDachshund.exe' },
+    timeout: 30000,
   });
   try {
-    const page = await app.firstWindow();
+    const page = await app.firstWindow({ timeout: 30000 });
     await page.waitForFunction(() => window.__pet && window.__pet.state);
     // Wait for the dog to say something matching `re` (ignoring its greeting).
     const saysSoon = (re) => page.waitForFunction((src) => {
