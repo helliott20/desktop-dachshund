@@ -1,7 +1,7 @@
 {
   "name": "desktop-dachshund",
   "productName": "Desktop Dachshund",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An 8-bit chocolate dapple dachshund that lives on your Windows desktop. Feed it, walk it, give it belly rubs.",
   "main": "main.js",
   "license": "MIT",
